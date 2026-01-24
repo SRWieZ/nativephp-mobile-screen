@@ -1,0 +1,73 @@
+{
+    "namespace": "MobileScreen",
+
+    "bridge_functions": [
+        {
+            "name": "MobileScreen.KeepAwake",
+            "android": "com.srwiez.plugins.mobilescreen.MobileScreenFunctions.KeepAwake",
+            "ios": "MobileScreenFunctions.KeepAwake",
+            "description": "Enable or disable screen wake lock to prevent the device from sleeping"
+        },
+        {
+            "name": "MobileScreen.IsAwake",
+            "android": "com.srwiez.plugins.mobilescreen.MobileScreenFunctions.IsAwake",
+            "ios": "MobileScreenFunctions.IsAwake",
+            "description": "Check if the screen wake lock is currently active"
+        },
+        {
+            "name": "MobileScreen.SetBrightness",
+            "android": "com.srwiez.plugins.mobilescreen.MobileScreenFunctions.SetBrightness",
+            "ios": "MobileScreenFunctions.SetBrightness",
+            "description": "Set the screen brightness level (0.0 to 1.0)"
+        },
+        {
+            "name": "MobileScreen.GetBrightness",
+            "android": "com.srwiez.plugins.mobilescreen.MobileScreenFunctions.GetBrightness",
+            "ios": "MobileScreenFunctions.GetBrightness",
+            "description": "Get the current screen brightness level"
+        },
+        {
+            "name": "MobileScreen.ResetBrightness",
+            "android": "com.srwiez.plugins.mobilescreen.MobileScreenFunctions.ResetBrightness",
+            "ios": "MobileScreenFunctions.ResetBrightness",
+            "description": "Reset the screen brightness to the system default"
+        },
+        {
+            "name": "MobileScreen.StartBrightnessListener",
+            "android": "com.srwiez.plugins.mobilescreen.MobileScreenFunctions.StartBrightnessListener",
+            "ios": "MobileScreenFunctions.StartBrightnessListener",
+            "description": "Start listening for brightness changes"
+        },
+        {
+            "name": "MobileScreen.StopBrightnessListener",
+            "android": "com.srwiez.plugins.mobilescreen.MobileScreenFunctions.StopBrightnessListener",
+            "ios": "MobileScreenFunctions.StopBrightnessListener",
+            "description": "Stop listening for brightness changes"
+        }
+    ],
+
+    "android": {
+        "permissions": [],
+        "dependencies": {
+            "implementation": []
+        },
+        "activities": [],
+        "services": [],
+        "receivers": [],
+        "providers": []
+    },
+
+    "ios": {
+        "info_plist": {},
+        "dependencies": {
+            "swift_packages": [],
+            "pods": []
+        }
+    },
+
+    "events": [
+        "SRWieZ\\MobileScreen\\Events\\BrightnessChanged"
+    ],
+
+    "hooks": {}
+}
