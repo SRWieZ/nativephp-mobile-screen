@@ -6,10 +6,9 @@ import android.os.Looper
 import android.provider.Settings
 import android.view.WindowManager
 import androidx.fragment.app.FragmentActivity
-import com.nativephp.mobile.NativeActionCoordinator
-import com.nativephp.mobile.bridge.BridgeError
 import com.nativephp.mobile.bridge.BridgeFunction
 import com.nativephp.mobile.bridge.BridgeResponse
+import com.nativephp.mobile.utils.NativeActionCoordinator
 import org.json.JSONObject
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -80,7 +79,7 @@ object MobileScreenFunctions {
     class SetBrightness(private val activity: FragmentActivity) : BridgeFunction {
         override fun execute(parameters: Map<String, Any>): Map<String, Any> {
             val level = (parameters["level"] as? Number)?.toFloat()
-                ?: return BridgeResponse.error(BridgeError("MISSING_PARAMETER", "Missing level parameter"))
+                ?: return BridgeResponse.success(mapOf("success" to false, "error" to "Missing level parameter"))
 
             // Clamp brightness between 0.01 (to avoid device issues) and 1.0
             val clampedLevel = level.coerceIn(0.01f, 1.0f)

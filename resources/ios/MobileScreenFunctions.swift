@@ -51,7 +51,10 @@ enum MobileScreenFunctions {
     class SetBrightness: BridgeFunction {
         func execute(parameters: [String: Any]) throws -> [String: Any] {
             guard let level = parameters["level"] as? Double else {
-                return BridgeResponse.error(code: "MISSING_PARAMETER", message: "Missing level parameter")
+                return BridgeResponse.success(data: [
+                    "success": false,
+                    "error": "Missing level parameter"
+                ])
             }
 
             let clampedLevel = min(max(CGFloat(level), 0.0), 1.0)
