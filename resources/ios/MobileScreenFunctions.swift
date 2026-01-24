@@ -1,8 +1,19 @@
 import Foundation
 import UIKit
 
+/// MobileScreen bridge functions for iOS.
+///
+/// Provides screen wake lock and brightness control functionality:
+/// - KeepAwake: Prevent device from sleeping
+/// - IsAwake: Check wake lock status
+/// - SetBrightness: Set screen brightness (0.0-1.0)
+/// - GetBrightness: Get current brightness level
+/// - ResetBrightness: Reset to original brightness
+/// - StartBrightnessListener: Listen for brightness changes (user-initiated only)
+/// - StopBrightnessListener: Stop listening for changes
 enum MobileScreenFunctions {
 
+    /// Internal state for tracking wake lock and brightness
     private class ScreenState {
         static let shared = ScreenState()
         var originalBrightness: CGFloat = -1
@@ -10,6 +21,7 @@ enum MobileScreenFunctions {
         var isListening = false
     }
 
+    /// Enable or disable screen wake lock to prevent device from sleeping
     class KeepAwake: BridgeFunction {
         func execute(parameters: [String: Any]) throws -> [String: Any] {
             let enabled = parameters["enabled"] as? Bool ?? true
@@ -22,6 +34,7 @@ enum MobileScreenFunctions {
         }
     }
 
+    /// Check if screen wake lock is currently active
     class IsAwake: BridgeFunction {
         func execute(parameters: [String: Any]) throws -> [String: Any] {
             var awake = false
@@ -34,13 +47,11 @@ enum MobileScreenFunctions {
         }
     }
 
+    /// Set screen brightness level (0.0-1.0)
     class SetBrightness: BridgeFunction {
         func execute(parameters: [String: Any]) throws -> [String: Any] {
             guard let level = parameters["level"] as? Double else {
-                return BridgeResponse.success(data: [
-                    "success": false,
-                    "error": "Missing level parameter"
-                ])
+                return BridgeResponse.error(code: "MISSING_PARAMETER", message: "Missing level parameter")
             }
 
             let clampedLevel = min(max(CGFloat(level), 0.0), 1.0)
@@ -70,6 +81,7 @@ enum MobileScreenFunctions {
         }
     }
 
+    /// Get current screen brightness level (0.0-1.0)
     class GetBrightness: BridgeFunction {
         func execute(parameters: [String: Any]) throws -> [String: Any] {
             var brightness: CGFloat = 0
@@ -82,6 +94,7 @@ enum MobileScreenFunctions {
         }
     }
 
+    /// Reset screen brightness to original value before app modified it
     class ResetBrightness: BridgeFunction {
         func execute(parameters: [String: Any]) throws -> [String: Any] {
             let originalBrightness = ScreenState.shared.originalBrightness
@@ -109,6 +122,7 @@ enum MobileScreenFunctions {
         }
     }
 
+    /// Start listening for brightness changes (Note: only detects user-initiated changes via Control Center, not programmatic changes)
     class StartBrightnessListener: BridgeFunction {
         func execute(parameters: [String: Any]) throws -> [String: Any] {
             if ScreenState.shared.isListening {
@@ -144,6 +158,7 @@ enum MobileScreenFunctions {
         }
     }
 
+    /// Stop listening for brightness changes
     class StopBrightnessListener: BridgeFunction {
         func execute(parameters: [String: Any]) throws -> [String: Any] {
             if let observer = ScreenState.shared.brightnessObserver {

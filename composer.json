@@ -1,12 +1,12 @@
 {
     "name": "srwiez/nativephp-mobile-screen",
-    "description": "A NativePHP plugin",
+    "description": "Screen wake lock and brightness control for NativePHP Mobile apps",
     "type": "nativephp-plugin",
     "license": "MIT",
     "authors": [
         {
-            "name": "Your Name",
-            "email": "you@example.com"
+            "name": "Eser Deniz",
+            "email": "srwiez@gmail.com"
         }
     ],
     "require": {

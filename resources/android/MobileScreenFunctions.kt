@@ -7,14 +7,28 @@ import android.provider.Settings
 import android.view.WindowManager
 import androidx.fragment.app.FragmentActivity
 import com.nativephp.mobile.NativeActionCoordinator
+import com.nativephp.mobile.bridge.BridgeError
 import com.nativephp.mobile.bridge.BridgeFunction
 import com.nativephp.mobile.bridge.BridgeResponse
 import org.json.JSONObject
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
+/**
+ * MobileScreen bridge functions for Android.
+ *
+ * Provides screen wake lock and brightness control functionality:
+ * - KeepAwake: Prevent device from sleeping
+ * - IsAwake: Check wake lock status
+ * - SetBrightness: Set screen brightness (0.0-1.0)
+ * - GetBrightness: Get current brightness level
+ * - ResetBrightness: Reset to system default
+ * - StartBrightnessListener: Listen for system brightness changes
+ * - StopBrightnessListener: Stop listening for changes
+ */
 object MobileScreenFunctions {
 
+    /** Internal state for tracking wake lock and brightness */
     private object ScreenState {
         var isAwake = false
         var originalBrightness: Float = -1f
@@ -22,6 +36,7 @@ object MobileScreenFunctions {
         var isListening = false
     }
 
+    /** Enable or disable screen wake lock to prevent device from sleeping */
     class KeepAwake(private val activity: FragmentActivity) : BridgeFunction {
         override fun execute(parameters: Map<String, Any>): Map<String, Any> {
             val enabled = parameters["enabled"] as? Boolean ?: true
@@ -43,6 +58,7 @@ object MobileScreenFunctions {
         }
     }
 
+    /** Check if screen wake lock is currently active */
     class IsAwake(private val activity: FragmentActivity) : BridgeFunction {
         override fun execute(parameters: Map<String, Any>): Map<String, Any> {
             var awake = false
@@ -60,10 +76,11 @@ object MobileScreenFunctions {
         }
     }
 
+    /** Set screen brightness level (0.0-1.0) */
     class SetBrightness(private val activity: FragmentActivity) : BridgeFunction {
         override fun execute(parameters: Map<String, Any>): Map<String, Any> {
             val level = (parameters["level"] as? Number)?.toFloat()
-                ?: return BridgeResponse.success(mapOf("success" to false, "error" to "Missing level parameter"))
+                ?: return BridgeResponse.error(BridgeError("MISSING_PARAMETER", "Missing level parameter"))
 
             // Clamp brightness between 0.01 (to avoid device issues) and 1.0
             val clampedLevel = level.coerceIn(0.01f, 1.0f)
@@ -96,6 +113,7 @@ object MobileScreenFunctions {
         }
     }
 
+    /** Get current screen brightness level (0.0-1.0) */
     class GetBrightness(private val activity: FragmentActivity) : BridgeFunction {
         override fun execute(parameters: Map<String, Any>): Map<String, Any> {
             var brightness = -1f
@@ -128,6 +146,7 @@ object MobileScreenFunctions {
         }
     }
 
+    /** Reset screen brightness to system default */
     class ResetBrightness(private val activity: FragmentActivity) : BridgeFunction {
         override fun execute(parameters: Map<String, Any>): Map<String, Any> {
             var newLevel = -1f
@@ -164,6 +183,7 @@ object MobileScreenFunctions {
         }
     }
 
+    /** Start listening for system brightness changes (Note: only detects system-level changes, not app-level) */
     class StartBrightnessListener(private val activity: FragmentActivity) : BridgeFunction {
         override fun execute(parameters: Map<String, Any>): Map<String, Any> {
             if (ScreenState.isListening) {
@@ -218,6 +238,7 @@ object MobileScreenFunctions {
         }
     }
 
+    /** Stop listening for brightness changes */
     class StopBrightnessListener(private val activity: FragmentActivity) : BridgeFunction {
         override fun execute(parameters: Map<String, Any>): Map<String, Any> {
             ScreenState.brightnessObserver?.let { observer ->
