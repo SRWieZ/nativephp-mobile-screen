@@ -1,6 +1,8 @@
 # MobileScreen Plugin for NativePHP Mobile
 
-A NativePHP plugin for screen wake lock and brightness control. Perfect for:
+A NativePHP plugin for screen wake lock and brightness control.
+
+Perfect for:
 - Ticketing apps displaying barcodes
 - Scoring apps showing live progress
 - Any app that needs to keep the screen visible
@@ -9,7 +11,6 @@ A NativePHP plugin for screen wake lock and brightness control. Perfect for:
 
 - **Keep Screen Awake** - Prevent the device from sleeping
 - **Brightness Control** - Set screen brightness programmatically
-- **No Permissions Required** - Works at the window/app level
 
 ## Installation
 
