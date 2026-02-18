@@ -27,14 +27,14 @@ php artisan native:plugin:register srwiez/nativephp-mobile-screen
 php artisan native:plugin:list
 ```
 
-This adds `\SRWieZ\MobileScreen\MobileScreenServiceProvider::class` to your `plugins()` array.
+This adds `\SRWieZ\NativePHP\Mobile\Screen\MobileScreenServiceProvider::class` to your `plugins()` array.
 
 ## Usage
 
 ### PHP (Livewire/Blade)
 
 ```php
-use SRWieZ\MobileScreen\Facades\MobileScreen;
+use SRWieZ\NativePHP\Mobile\Screen\Facades\MobileScreen;
 
 // Keep screen awake
 $result = MobileScreen::keepAwake();
@@ -89,3 +89,7 @@ await mobileScreen.allowSleep();
 | `setBrightness(float $level)` | `array{success: bool, level: float}` | Set brightness (0.0-1.0) |
 | `getBrightness()` | `array{level: float\|null}` | Get current brightness level |
 | `resetBrightness()` | `array{success: bool}` | Reset to system default |
+
+## Support
+
+For questions or issues, email [nativephp@eserdeniz.fr](mailto:nativephp@eserdeniz.fr).
