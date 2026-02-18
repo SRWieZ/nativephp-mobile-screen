@@ -1,6 +1,6 @@
 <?php
 
-namespace SRWieZ\MobileScreen\Events;
+namespace SRWieZ\NativePHP\Mobile\Screen\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;

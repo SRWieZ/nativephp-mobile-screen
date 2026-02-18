@@ -50,7 +50,7 @@ describe('Plugin Manifest', function () {
         $manifest = json_decode(file_get_contents($this->manifestPath), true);
 
         expect($manifest)->toHaveKey('events');
-        expect($manifest['events'])->toContain('SRWieZ\\MobileScreen\\Events\\BrightnessChanged');
+        expect($manifest['events'])->toContain('SRWieZ\\NativePHP\\Mobile\\Screen\\Events\\BrightnessChanged');
     });
 });
 
@@ -94,22 +94,22 @@ describe('Native Code', function () {
 
 describe('PHP Classes', function () {
     it('has service provider', function () {
-        $file = $this->pluginPath.'/src/MobileScreenServiceProvider.php';
+        $file = $this->pluginPath.'/src/ScreenServiceProvider.php';
         expect(file_exists($file))->toBeTrue();
     });
 
     it('has facade', function () {
-        $file = $this->pluginPath.'/src/Facades/MobileScreen.php';
+        $file = $this->pluginPath.'/src/Facades/Screen.php';
         expect(file_exists($file))->toBeTrue();
     });
 
     it('has main implementation class', function () {
-        $file = $this->pluginPath.'/src/MobileScreen.php';
+        $file = $this->pluginPath.'/src/Screen.php';
         expect(file_exists($file))->toBeTrue();
     });
 
     it('has all required methods in main class', function () {
-        $file = $this->pluginPath.'/src/MobileScreen.php';
+        $file = $this->pluginPath.'/src/Screen.php';
         $content = file_get_contents($file);
 
         expect($content)->toContain('function keepAwake');

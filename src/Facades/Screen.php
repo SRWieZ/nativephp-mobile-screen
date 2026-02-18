@@ -1,6 +1,6 @@
 <?php
 
-namespace SRWieZ\MobileScreen\Facades;
+namespace SRWieZ\NativePHP\Mobile\Screen\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
@@ -14,12 +14,12 @@ use Illuminate\Support\Facades\Facade;
  * @method static bool startBrightnessListener()
  * @method static bool stopBrightnessListener()
  *
- * @see \SRWieZ\MobileScreen\MobileScreen
+ * @see \SRWieZ\NativePHP\Mobile\Screen\Screen
  */
-class MobileScreen extends Facade
+class Screen extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return \SRWieZ\MobileScreen\MobileScreen::class;
+        return \SRWieZ\NativePHP\Mobile\Screen\Screen::class;
     }
 }

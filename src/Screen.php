@@ -1,8 +1,8 @@
 <?php
 
-namespace SRWieZ\MobileScreen;
+namespace SRWieZ\NativePHP\Mobile\Screen;
 
-class MobileScreen
+class Screen
 {
     /**
      * Keep the screen awake (prevent the device from sleeping)
