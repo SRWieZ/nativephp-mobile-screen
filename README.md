@@ -37,30 +37,22 @@ This adds `\SRWieZ\NativePHP\Mobile\Screen\MobileScreenServiceProvider::class` t
 use SRWieZ\NativePHP\Mobile\Screen\Facades\MobileScreen;
 
 // Keep screen awake
-$result = MobileScreen::keepAwake();
-if ($result['enabled']) {
-    // Wake lock enabled
-}
+MobileScreen::keepAwake(); // true if wake lock enabled
 
 // Allow screen to sleep
-$result = MobileScreen::allowSleep();
+MobileScreen::allowSleep(); // true if wake lock disabled
 
 // Check wake lock status
-$result = MobileScreen::isAwake();
-$isAwake = $result['awake']; // bool
+$isAwake = MobileScreen::isAwake(); // bool
 
 // Set brightness (0.0 to 1.0)
-$result = MobileScreen::setBrightness(1.0);  // Maximum brightness
-if ($result['success']) {
-    $actualLevel = $result['level'];
-}
+$level = MobileScreen::setBrightness(1.0); // returns actual level, or false on failure
 
 // Get current brightness
-$result = MobileScreen::getBrightness();
-$level = $result['level']; // float or null
+$level = MobileScreen::getBrightness(); // float or null
 
 // Reset to system default
-$result = MobileScreen::resetBrightness();
+MobileScreen::resetBrightness(); // returns level or false on failure
 ```
 
 ### JavaScript (Vue/React/Inertia)
@@ -83,12 +75,12 @@ await mobileScreen.allowSleep();
 
 | Method | Returns | Description |
 |--------|---------|-------------|
-| `keepAwake(bool $enabled = true)` | `array{enabled: bool}` | Enable/disable screen wake lock |
-| `allowSleep()` | `array{enabled: bool}` | Alias for `keepAwake(false)` |
-| `isAwake()` | `array{awake: bool}` | Check if wake lock is active |
-| `setBrightness(float $level)` | `array{success: bool, level: float}` | Set brightness (0.0-1.0) |
-| `getBrightness()` | `array{level: float\|null}` | Get current brightness level |
-| `resetBrightness()` | `array{success: bool}` | Reset to system default |
+| `keepAwake(bool $enabled = true)` | `bool` | Enable/disable screen wake lock |
+| `allowSleep()` | `bool` | Alias for `keepAwake(false)` |
+| `isAwake()` | `bool` | Check if wake lock is active |
+| `setBrightness(float $level)` | `bool\|float` | Set brightness (0.0-1.0). Returns actual level or `false` on failure |
+| `getBrightness()` | `?float` | Get current brightness level |
+| `resetBrightness()` | `bool\|float` | Reset to system default. Returns level or `false` on failure |
 
 ## Support
 
