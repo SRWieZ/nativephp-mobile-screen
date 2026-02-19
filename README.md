@@ -83,6 +83,13 @@ await mobileScreen.allowSleep();
 | `getBrightness()` | `?float` | Get current brightness level |
 | `resetBrightness()` | `bool\|float` | Reset to system default. Returns level or `false` on failure |
 
+## Version Support
+
+| Platform | Minimum Version |
+|----------|----------------|
+| Android  | 5.0 (API 21)   |
+| iOS      | 13.0            |
+
 ## Support
 
 For questions or issues, email [nativephp@eserdeniz.fr](mailto:nativephp@eserdeniz.fr).

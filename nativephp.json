@@ -47,6 +47,7 @@
     ],
 
     "android": {
+        "min_version": 21,
         "permissions": [],
         "dependencies": {
             "implementation": []
@@ -58,6 +59,7 @@
     },
 
     "ios": {
+        "min_version": "13.0",
         "info_plist": {},
         "dependencies": {
             "swift_packages": [],
