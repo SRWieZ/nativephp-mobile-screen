@@ -35,25 +35,25 @@ This adds `\SRWieZ\NativePHP\Mobile\Screen\MobileScreenServiceProvider::class` t
 ### PHP (Livewire/Blade)
 
 ```php
-use SRWieZ\NativePHP\Mobile\Screen\Facades\MobileScreen;
+use SRWieZ\NativePHP\Mobile\Screen\Facades\Screen;
 
 // Keep screen awake
-MobileScreen::keepAwake(); // true if wake lock enabled
+Screen::keepAwake(); // true if wake lock enabled
 
 // Allow screen to sleep
-MobileScreen::allowSleep(); // true if wake lock disabled
+Screen::allowSleep(); // true if wake lock disabled
 
 // Check wake lock status
-$isAwake = MobileScreen::isAwake(); // bool
+$isAwake = Screen::isAwake(); // bool
 
 // Set brightness (0.0 to 1.0)
-$level = MobileScreen::setBrightness(1.0); // returns actual level, or false on failure
+$level = Screen::setBrightness(1.0); // returns actual level, or false on failure
 
 // Get current brightness
-$level = MobileScreen::getBrightness(); // float or null
+$level = Screen::getBrightness(); // float or null
 
 // Reset to system default
-MobileScreen::resetBrightness(); // returns level or false on failure
+Screen::resetBrightness(); // returns level or false on failure
 ```
 
 ### JavaScript (Vue/React/Inertia)
