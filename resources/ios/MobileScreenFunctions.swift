@@ -125,7 +125,8 @@ enum MobileScreenFunctions {
         }
     }
 
-    /// Start listening for brightness changes (Note: only detects user-initiated changes via Control Center, not programmatic changes)
+    /// Start listening for brightness changes
+    /// (Note: only detects user-initiated changes via Control Center, not programmatic changes)
     class StartBrightnessListener: BridgeFunction {
         func execute(parameters: [String: Any]) throws -> [String: Any] {
             if ScreenState.shared.isListening {

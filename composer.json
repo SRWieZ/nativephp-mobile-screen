@@ -43,7 +43,9 @@
         }
     },
     "scripts": {
-        "test": "pest"
+        "test": "pest",
+        "lint": "pint",
+        "lint:swift": "swiftlint lint resources/ios/"
     },
     "config": {
         "allow-plugins": {
