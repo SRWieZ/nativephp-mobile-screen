@@ -145,7 +145,7 @@ enum MobileScreenFunctions {
                 let timestamp = Int(Date().timeIntervalSince1970)
 
                 LaravelBridge.shared.send?(
-                    "SRWieZ\\MobileScreen\\Events\\BrightnessChanged",
+                    "SRWieZ\\NativePHP\\Mobile\\Screen\\Events\\BrightnessChanged",
                     [
                         "level": Double(brightness),
                         "timestamp": timestamp

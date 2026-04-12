@@ -213,7 +213,7 @@ object MobileScreenFunctions {
 
                         NativeActionCoordinator.dispatchEvent(
                             activity,
-                            "SRWieZ\\MobileScreen\\Events\\BrightnessChanged",
+                            "SRWieZ\\NativePHP\\Mobile\\Screen\\Events\\BrightnessChanged",
                             payload.toString()
                         )
                     } catch (e: Exception) {
