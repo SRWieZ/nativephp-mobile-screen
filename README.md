@@ -1,16 +1,34 @@
-# MobileScreen Plugin for NativePHP Mobile
+# Screen for NativePHP Mobile
 
-A NativePHP plugin for screen wake lock and brightness control.
+### Keep screens awake. Control brightness. Built for apps users stare at.
 
-Perfect for:
-- Ticketing apps displaying barcodes
-- Scoring apps showing live progress
-- Any app that needs to keep the screen visible
+<p align="center">
+  <img src="https://raw.githubusercontent.com/SRWieZ/nativephp-mobile-packages/main/art/screenshots/screen-ios.png" width="280" alt="Screen plugin on iOS" />
+  <img src="https://raw.githubusercontent.com/SRWieZ/nativephp-mobile-packages/main/art/screenshots/screen-android.png" width="280" alt="Screen plugin on Android" />
+</p>
 
-## Features
+A tiny, focused NativePHP plugin for two things mobile devs constantly need: keeping the screen on and controlling brightness. One facade, six methods, zero setup.
 
-- **Keep Screen Awake** - Prevent the device from sleeping
-- **Brightness Control** - Set screen brightness programmatically
+## Why this plugin?
+
+- **☀️ Keep the screen awake** — perfect for barcode tickets, live dashboards, kiosks and scoring apps.
+- **🔆 Control brightness** — crank to 100% to scan barcodes in sunlight, dim down for dark reading rooms.
+- **🪶 Dependency-free** — a single wake-lock + brightness wrapper. No bloat, no configuration.
+- **📱 Works everywhere** — iOS 13+ and Android 5+ (API 21).
+
+## Features at a glance
+
+| Feature | Android | iOS |
+|:---|:---:|:---:|
+| Keep screen awake | ✅ | ✅ |
+| Set brightness (0.0–1.0) | ✅ | ✅ |
+| Reset to system default | ✅ | ✅ |
+
+## Perfect for
+
+Ticket & boarding-pass apps · Barcode / QR scanners · Kiosk & POS apps · Sports scoreboards · Live dashboards & monitoring · E-readers
+
+---
 
 ## Installation
 
