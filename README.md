@@ -108,6 +108,14 @@ await mobileScreen.allowSleep();
 | Android  | 5.0 (API 21)   |
 | iOS      | 13.0            |
 
+## More NativePHP Mobile plugins
+
+Building a mobile app with NativePHP? Check out the rest of the suite:
+
+- **[Calendar](https://nativephp.com/plugins/srwiez/nativephp-mobile-calendar)** — Native calendars & events from PHP, on both platforms.
+- **[Contacts](https://nativephp.com/plugins/srwiez/nativephp-mobile-contacts)** — Read, create & sync the device address book straight from Laravel.
+- **[Screenshots](https://nativephp.com/plugins/srwiez/nativephp-mobile-screenshots)** — Lock down sensitive screens, catch capture attempts, respond instantly.
+
 ## Support
 
-For questions or issues, email [nativephp@eserdeniz.fr](mailto:nativephp@eserdeniz.fr).
+Bugs, questions, and feature requests should be reported at [github.com/SRWieZ/nativephp-mobile-screen/issues](https://github.com/SRWieZ/nativephp-mobile-screen/issues).
