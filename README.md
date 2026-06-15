@@ -3,6 +3,12 @@
 ### Keep screens awake. Control brightness. Built for apps users stare at.
 
 <p align="center">
+  <a href="https://packagist.org/packages/srwiez/nativephp-mobile-screen">
+    <img src="https://badge.laravel.cloud/badge/srwiez/nativephp-mobile-screen?style=flat" alt="Laravel Version Compatibility" />
+  </a>
+</p>
+
+<p align="center">
   <img src="https://raw.githubusercontent.com/SRWieZ/nativephp-mobile-packages/main/art/screenshots/screen-ios.png" width="280" alt="Screen plugin on iOS" />
   <img src="https://raw.githubusercontent.com/SRWieZ/nativephp-mobile-packages/main/art/screenshots/screen-android.png" width="280" alt="Screen plugin on Android" />
 </p>
