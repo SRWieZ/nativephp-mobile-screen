@@ -1,0 +1,42 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  pest:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # PHP 8.3 resolves nativephp/mobile ^3, PHP 8.4 resolves ^4,
+        # so the matrix covers both supported majors.
+        php: ['8.3', '8.4']
+    name: pest (PHP ${{ matrix.php }})
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      - run: composer update --prefer-dist --no-interaction --no-progress
+
+      - run: vendor/bin/pest --ci
+
+  pint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - run: composer update --prefer-dist --no-interaction --no-progress
+
+      - run: vendor/bin/pint --test
