@@ -6,28 +6,34 @@ class Screen
 {
     /**
      * Keep the screen awake (prevent the device from sleeping)
+     *
+     * @return bool True when the requested wake lock state was applied
      */
     public function keepAwake(bool $enabled = true): bool
     {
-        if (function_exists('nativephp_call')) {
-            $result = nativephp_call('MobileScreen.KeepAwake', json_encode(['enabled' => $enabled]));
-
-            if ($result) {
-                $decoded = json_decode($result);
-
-                return $decoded->enabled ?? false;
-            }
+        if (! function_exists('nativephp_call')) {
+            return false;
         }
 
-        return false;
+        $result = nativephp_call('MobileScreen.KeepAwake', json_encode(['enabled' => $enabled]));
+
+        if (! $result) {
+            return false;
+        }
+
+        $decoded = json_decode($result);
+
+        return ($decoded->enabled ?? null) === $enabled;
     }
 
     /**
      * Allow the screen to sleep (disable wake lock)
+     *
+     * @return bool True when the wake lock was released
      */
     public function allowSleep(): bool
     {
-        return ! $this->keepAwake(false);
+        return $this->keepAwake(false);
     }
 
     /**
