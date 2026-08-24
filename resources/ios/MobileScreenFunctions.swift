@@ -58,22 +58,16 @@ enum MobileScreenFunctions {
             }
 
             let clampedLevel = min(max(CGFloat(level), 0.0), 1.0)
-
-            // Store original brightness if not already stored
-            if ScreenState.shared.originalBrightness < 0 {
-                DispatchQueue.main.sync {
-                    ScreenState.shared.originalBrightness = UIScreen.main.brightness
-                }
-            }
+            var actualLevel: CGFloat = clampedLevel
 
             // Use sync to ensure brightness is set before returning
             DispatchQueue.main.sync {
-                UIScreen.main.brightness = clampedLevel
-            }
+                // Store original brightness if not already stored
+                if ScreenState.shared.originalBrightness < 0 {
+                    ScreenState.shared.originalBrightness = UIScreen.main.brightness
+                }
 
-            // Read back the actual brightness
-            var actualLevel: CGFloat = clampedLevel
-            DispatchQueue.main.sync {
+                UIScreen.main.brightness = clampedLevel
                 actualLevel = UIScreen.main.brightness
             }
 
@@ -104,19 +98,15 @@ enum MobileScreenFunctions {
 
             var newLevel: CGFloat = -1
 
-            if originalBrightness >= 0 {
-                DispatchQueue.main.sync {
+            DispatchQueue.main.sync {
+                if originalBrightness >= 0 {
                     UIScreen.main.brightness = originalBrightness
-                    newLevel = UIScreen.main.brightness
                 }
-                // Reset stored original brightness
-                ScreenState.shared.originalBrightness = -1
-            } else {
-                // No original stored, just return current
-                DispatchQueue.main.sync {
-                    newLevel = UIScreen.main.brightness
-                }
+                newLevel = UIScreen.main.brightness
             }
+
+            // Reset stored original brightness
+            ScreenState.shared.originalBrightness = -1
 
             return BridgeResponse.success(data: [
                 "success": true,

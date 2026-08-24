@@ -124,7 +124,10 @@ class Screen
     }
 
     /**
-     * Start listening for brightness changes (iOS only)
+     * Start listening for brightness changes
+     *
+     * On iOS this reports user-initiated changes (e.g. Control Center);
+     * on Android it reports system brightness changes.
      */
     public function startBrightnessListener(): bool
     {

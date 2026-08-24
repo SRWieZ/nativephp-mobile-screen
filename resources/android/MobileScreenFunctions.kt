@@ -29,7 +29,6 @@ object MobileScreenFunctions {
 
     /** Internal state for tracking wake lock and brightness */
     private object ScreenState {
-        var isAwake = false
         var originalBrightness: Float = -1f
         var brightnessObserver: ContentObserver? = null
         var isListening = false
@@ -47,7 +46,6 @@ object MobileScreenFunctions {
                 } else {
                     activity.window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                 }
-                ScreenState.isAwake = enabled
                 latch.countDown()
             }
 
@@ -86,16 +84,14 @@ object MobileScreenFunctions {
             var actualLevel = clampedLevel
             val latch = CountDownLatch(1)
 
-            // Store original brightness if not already stored
-            if (ScreenState.originalBrightness < 0) {
-                val currentBrightness = activity.window.attributes.screenBrightness
-                if (currentBrightness >= 0) {
-                    ScreenState.originalBrightness = currentBrightness
-                }
-            }
-
             activity.runOnUiThread {
                 val layoutParams = activity.window.attributes
+
+                // Store original brightness if not already stored
+                if (ScreenState.originalBrightness < 0 && layoutParams.screenBrightness >= 0) {
+                    ScreenState.originalBrightness = layoutParams.screenBrightness
+                }
+
                 layoutParams.screenBrightness = clampedLevel
                 activity.window.attributes = layoutParams
                 // Read back actual value
