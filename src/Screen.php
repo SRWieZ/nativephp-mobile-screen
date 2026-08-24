@@ -94,7 +94,7 @@ class Screen
 
                 $level = $decoded->level ?? null;
 
-                return $level !== null ? (float) $level : null;
+                return is_numeric($level) && $level >= 0 ? (float) $level : null;
             }
         }
 
