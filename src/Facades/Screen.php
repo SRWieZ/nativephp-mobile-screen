@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Facade;
  * @method static bool|float resetBrightness()
  * @method static bool startBrightnessListener()
  * @method static bool stopBrightnessListener()
+ * @method static bool isAvailable()
+ * @method static bool canControlBrightness()
  *
  * @see \SRWieZ\NativePHP\Mobile\Screen\Screen
  */

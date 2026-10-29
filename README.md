@@ -157,6 +157,20 @@ Event::listen(function (BrightnessChanged $event) {
 > the pre-v4 form. It still works wherever Livewire is installed, but it
 > extends Livewire's attribute, so a v4 app without Livewire never reads it.
 
+### Checking availability
+
+Two PHP-only checks tell you what the running app provides, without calling
+any native function. Both return `false` outside a NativePHP app (tests, web
+preview). They have no JavaScript equivalent.
+
+```php
+Screen::isAvailable();          // the plugin's native side is installed
+Screen::canControlBrightness(); // setBrightness() is available
+```
+
+On NativePHP v4 you can test the fallback path with
+`FakeBridge::enable()->withoutCapability('MobileScreen.SetBrightness')`.
+
 ### JavaScript (Vue/React/Inertia)
 
 The JS module ships inside the composer package. Import it from the vendor path
@@ -188,6 +202,8 @@ await mobileScreen.allowSleep();
 | `resetBrightness()` | `bool\|float` | Reset to system default. Returns level or `false` on failure |
 | `startBrightnessListener()` | `bool` | Start dispatching `BrightnessChanged` events |
 | `stopBrightnessListener()` | `bool` | Stop the brightness listener |
+| `isAvailable()` | `bool` | Whether the plugin's native side is installed (PHP only) |
+| `canControlBrightness()` | `bool` | Whether brightness control is available (PHP only) |
 
 ## Testing your app
 
