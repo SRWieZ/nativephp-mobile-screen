@@ -4,7 +4,7 @@
  * Screen wake lock and brightness control for mobile apps.
  *
  * @example
- * import { mobileScreen } from '@srwiez/nativephp-mobile-screen';
+ * import { mobileScreen } from '../../vendor/srwiez/nativephp-mobile-screen/resources/js/mobileScreen.js';
  *
  * // Keep screen awake (e.g., for barcode display)
  * await mobileScreen.keepAwake();

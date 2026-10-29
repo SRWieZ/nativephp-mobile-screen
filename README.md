@@ -83,22 +83,79 @@ Screen::resetBrightness(); // returns level or false on failure
 
 ### Brightness change events
 
-Start the listener and NativePHP dispatches a regular Laravel event whenever the
-brightness changes (on iOS: user-initiated changes, e.g. via Control Center; on
-Android: system brightness changes):
+Start the listener and the plugin dispatches a `BrightnessChanged` event whenever
+the brightness changes (on iOS: user-initiated changes, e.g. via Control Center;
+on Android: system brightness changes). Stop it when the screen goes away.
 
 ```php
-use SRWieZ\NativePHP\Mobile\Screen\Events\BrightnessChanged;
-
 Screen::startBrightnessListener();
 
-// In a listener, or with Livewire's #[On] attribute:
-Event::listen(function (BrightnessChanged $event) {
-    // $event->level, $event->timestamp
-});
-
+// ... later
 Screen::stopBrightnessListener();
 ```
+
+| Event | Payload keys |
+|-------|--------------|
+| `BrightnessChanged` | `level` (float, 0.0–1.0), `timestamp` (Unix seconds) |
+
+Pick the listener style that matches where your code runs. Handler parameters
+are bound by payload key name, so name them after the keys above.
+
+**NativePHP v4 native screens.** Put `Native\Mobile\Attributes\On` on a method of
+a `Native\Mobile\Edge\NativeComponent` and pass the event class. The attribute adds
+the `native:` prefix for you.
+
+```php
+use Native\Mobile\Attributes\On;
+use Native\Mobile\Edge\NativeComponent;
+use SRWieZ\NativePHP\Mobile\Screen\Events\BrightnessChanged;
+
+class TicketScreen extends NativeComponent
+{
+    #[On(BrightnessChanged::class)]
+    public function brightnessChanged(float $level, ?int $timestamp = null): void
+    {
+        // ...
+    }
+}
+```
+
+**Web view screens with Livewire.** Use Livewire's own `On` attribute with the
+`native:` prefix in front of the event class.
+
+```php
+use Livewire\Attributes\On;
+use Livewire\Component;
+use SRWieZ\NativePHP\Mobile\Screen\Events\BrightnessChanged;
+
+class TicketScreen extends Component
+{
+    #[On('native:'.BrightnessChanged::class)]
+    public function brightnessChanged(float $level, ?int $timestamp = null): void
+    {
+        // ...
+    }
+}
+```
+
+**Plain Laravel listeners.** In web view apps, `Event::listen` receives the
+event object. It is not tied to a screen, so use it for side effects such as
+logging. On NativePHP 4.6.1+ and 3.3.11+ this needs plugin 2.1.0 or later. On v4
+native screens, plugin events only reach the screen's `#[On]` handlers.
+
+```php
+use Illuminate\Support\Facades\Event;
+use SRWieZ\NativePHP\Mobile\Screen\Events\BrightnessChanged;
+
+Event::listen(function (BrightnessChanged $event) {
+    logger()->info('Brightness changed', ['level' => $event->level]);
+});
+```
+
+> [!NOTE]
+> `#[OnNative(BrightnessChanged::class)]` (`Native\Mobile\Attributes\OnNative`) is
+> the pre-v4 form. It still works wherever Livewire is installed, but it
+> extends Livewire's attribute, so a v4 app without Livewire never reads it.
 
 ### JavaScript (Vue/React/Inertia)
 
