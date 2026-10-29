@@ -7,6 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-10-29
+
+### Added
+
+- `Screen::isAvailable()` and `Screen::canControlBrightness()`: PHP-only
+  checks that tell you whether the plugin's native side is installed and
+  whether brightness control is available. Test the fallback path with
+  `FakeBridge::withoutCapability()`.
+- This changelog, backfilled from the earlier releases.
+
+### Changed
+
+- Documented how to listen for events on NativePHP v4 native screens, with
+  the payload keys of every event.
+- The Boost guidelines describe the current API. They still showed the 1.x
+  `MobileScreen` facade, its namespace and array results.
+- The README states the real NativePHP v4 minimums (Android API 26, iOS
+  18.2), not API 29 and iOS 18.
+- `LICENSE` is now `LICENSE.md`, like the other plugins.
+
+### Fixed
+
+- PHP listeners (`Event::listen`) now receive this plugin's events on
+  nativephp/mobile 4.6.1+ and 3.3.11+. Those versions only deliver events
+  that opt in, and the plugin's events did not, so listeners stayed silent
+  while Livewire still reacted. The minimum core versions move to 4.6.1
+  and 3.3.11 accordingly.
+- Native-side errors are now reported as failures instead of being read as
+  data. The error code and message are logged at debug level.
+
 ## [2.0.0] - 2026-08-24
 
 Modernized for NativePHP Mobile v4 (v3 keeps working).
@@ -66,7 +96,8 @@ Modernized for NativePHP Mobile v4 (v3 keeps working).
 - Initial release: keep the screen awake, set, read and reset the
   brightness, and listen for brightness changes on iOS and Android.
 
-[Unreleased]: https://github.com/SRWieZ/nativephp-mobile-screen/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/SRWieZ/nativephp-mobile-screen/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/SRWieZ/nativephp-mobile-screen/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/SRWieZ/nativephp-mobile-screen/compare/v1.1.0...v2.0.0
 [1.1.0]: https://github.com/SRWieZ/nativephp-mobile-screen/compare/v1.0.2...v1.1.0
 [1.0.2]: https://github.com/SRWieZ/nativephp-mobile-screen/compare/v1.0.1...v1.0.2
