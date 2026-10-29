@@ -2,6 +2,9 @@
 
 namespace SRWieZ\NativePHP\Mobile\Screen;
 
+use Illuminate\Support\Facades\Log;
+use stdClass;
+
 class Screen
 {
     /**
@@ -11,19 +14,9 @@ class Screen
      */
     public function keepAwake(bool $enabled = true): bool
     {
-        if (! function_exists('nativephp_call')) {
-            return false;
-        }
+        $result = $this->call('MobileScreen.KeepAwake', ['enabled' => $enabled]);
 
-        $result = nativephp_call('MobileScreen.KeepAwake', json_encode(['enabled' => $enabled]));
-
-        if (! $result) {
-            return false;
-        }
-
-        $decoded = json_decode($result);
-
-        return ($decoded->enabled ?? null) === $enabled;
+        return ($result['enabled'] ?? null) === $enabled;
     }
 
     /**
@@ -41,17 +34,9 @@ class Screen
      */
     public function isAwake(): bool
     {
-        if (function_exists('nativephp_call')) {
-            $result = nativephp_call('MobileScreen.IsAwake', '{}');
+        $result = $this->call('MobileScreen.IsAwake');
 
-            if ($result) {
-                $decoded = json_decode($result);
-
-                return $decoded->awake ?? false;
-            }
-        }
-
-        return false;
+        return $result['awake'] ?? false;
     }
 
     /**
@@ -64,19 +49,13 @@ class Screen
     {
         $level = max(0.0, min(1.0, $level));
 
-        if (function_exists('nativephp_call')) {
-            $result = nativephp_call('MobileScreen.SetBrightness', json_encode(['level' => $level]));
+        $result = $this->call('MobileScreen.SetBrightness', ['level' => $level]);
 
-            if ($result) {
-                $decoded = json_decode($result);
-
-                if ($decoded->success ?? false) {
-                    return $decoded->level ?? $level;
-                }
-            }
+        if (! ($result['success'] ?? false)) {
+            return false;
         }
 
-        return false;
+        return $result['level'] ?? $level;
     }
 
     /**
@@ -86,19 +65,9 @@ class Screen
      */
     public function getBrightness(): ?float
     {
-        if (function_exists('nativephp_call')) {
-            $result = nativephp_call('MobileScreen.GetBrightness', '{}');
+        $level = $this->call('MobileScreen.GetBrightness')['level'] ?? null;
 
-            if ($result) {
-                $decoded = json_decode($result);
-
-                $level = $decoded->level ?? null;
-
-                return is_numeric($level) && $level >= 0 ? (float) $level : null;
-            }
-        }
-
-        return null;
+        return is_numeric($level) && $level >= 0 ? (float) $level : null;
     }
 
     /**
@@ -108,19 +77,13 @@ class Screen
      */
     public function resetBrightness(): bool|float
     {
-        if (function_exists('nativephp_call')) {
-            $result = nativephp_call('MobileScreen.ResetBrightness', '{}');
+        $result = $this->call('MobileScreen.ResetBrightness');
 
-            if ($result) {
-                $decoded = json_decode($result);
-
-                if ($decoded->success ?? false) {
-                    return $decoded->level ?? true;
-                }
-            }
+        if (! ($result['success'] ?? false)) {
+            return false;
         }
 
-        return false;
+        return $result['level'] ?? true;
     }
 
     /**
@@ -131,17 +94,7 @@ class Screen
      */
     public function startBrightnessListener(): bool
     {
-        if (function_exists('nativephp_call')) {
-            $result = nativephp_call('MobileScreen.StartBrightnessListener', '{}');
-
-            if ($result) {
-                $decoded = json_decode($result);
-
-                return $decoded->success ?? false;
-            }
-        }
-
-        return false;
+        return $this->call('MobileScreen.StartBrightnessListener')['success'] ?? false;
     }
 
     /**
@@ -149,16 +102,47 @@ class Screen
      */
     public function stopBrightnessListener(): bool
     {
-        if (function_exists('nativephp_call')) {
-            $result = nativephp_call('MobileScreen.StopBrightnessListener', '{}');
+        return $this->call('MobileScreen.StopBrightnessListener')['success'] ?? false;
+    }
 
-            if ($result) {
-                $decoded = json_decode($result);
-
-                return $decoded->success ?? false;
-            }
+    /**
+     * Call a native bridge function and decode its response.
+     *
+     * Returns null when the bridge is unavailable, answers nothing or invalid
+     * JSON, or reports an error ({"status": "error", ...}). Each public method
+     * maps null to its documented failure value.
+     *
+     * @param  array<string, mixed>  $params
+     * @return array<string, mixed>|null
+     */
+    protected function call(string $method, array $params = []): ?array
+    {
+        if (! function_exists('nativephp_call')) {
+            return null;
         }
 
-        return false;
+        $result = nativephp_call($method, json_encode($params === [] ? new stdClass : $params));
+
+        if (! $result) {
+            return null;
+        }
+
+        $decoded = json_decode($result, true);
+
+        if (! is_array($decoded)) {
+            return null;
+        }
+
+        if (($decoded['status'] ?? null) === 'error') {
+            Log::debug('Native bridge call failed', [
+                'method' => $method,
+                'code' => $decoded['code'] ?? null,
+                'message' => $decoded['message'] ?? null,
+            ]);
+
+            return null;
+        }
+
+        return $decoded;
     }
 }
