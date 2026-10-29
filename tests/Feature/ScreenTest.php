@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
 use Native\Mobile\Testing\FakeBridge;
 use SRWieZ\NativePHP\Mobile\Screen\Facades\Screen;
 
@@ -137,5 +138,44 @@ describe('brightness listener', function () {
             'MobileScreen.StartBrightnessListener',
             'MobileScreen.StopBrightnessListener',
         ]);
+    });
+});
+
+describe('native errors', function () {
+    it('returns its failure value when the native side answers with an error', function (string $method, Closure $call, mixed $failure) {
+        $this->bridge->respondTo($method, ['status' => 'error', 'code' => 'EXECUTION_FAILED', 'message' => 'x']);
+
+        expect($call())->toBe($failure);
+
+        $this->bridge->assertCalled($method);
+    })->with([
+        'keepAwake' => ['MobileScreen.KeepAwake', fn () => Screen::keepAwake(), false],
+        'allowSleep' => ['MobileScreen.KeepAwake', fn () => Screen::allowSleep(), false],
+        'isAwake' => ['MobileScreen.IsAwake', fn () => Screen::isAwake(), false],
+        'setBrightness' => ['MobileScreen.SetBrightness', fn () => Screen::setBrightness(0.5), false],
+        'getBrightness' => ['MobileScreen.GetBrightness', fn () => Screen::getBrightness(), null],
+        'resetBrightness' => ['MobileScreen.ResetBrightness', fn () => Screen::resetBrightness(), false],
+        'startBrightnessListener' => ['MobileScreen.StartBrightnessListener', fn () => Screen::startBrightnessListener(), false],
+        'stopBrightnessListener' => ['MobileScreen.StopBrightnessListener', fn () => Screen::stopBrightnessListener(), false],
+    ]);
+
+    it('logs the native error at debug level', function () {
+        Log::spy();
+
+        $this->bridge->respondTo('MobileScreen.SetBrightness', ['status' => 'error', 'code' => 'INVALID_PARAMETERS', 'message' => 'level must be a number']);
+
+        Screen::setBrightness(0.5);
+
+        Log::shouldHaveReceived('debug')->once()->with('Native bridge call failed', [
+            'method' => 'MobileScreen.SetBrightness',
+            'code' => 'INVALID_PARAMETERS',
+            'message' => 'level must be a number',
+        ]);
+    });
+
+    it('returns its failure value when the native side answers invalid JSON', function () {
+        $this->bridge->respondTo('MobileScreen.IsAwake', 'not json');
+
+        expect(Screen::isAwake())->toBeFalse();
     });
 });
