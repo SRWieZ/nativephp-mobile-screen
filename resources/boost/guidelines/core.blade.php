@@ -64,6 +64,8 @@ Screen::resetBrightness();
 | `Screen::resetBrightness()` | `bool\|float` | Reset to system default, returns the level or `false` |
 | `Screen::startBrightnessListener()` | `bool` | Start dispatching `BrightnessChanged` |
 | `Screen::stopBrightnessListener()` | `bool` | Stop the brightness listener |
+| `Screen::isAvailable()` | `bool` | Whether the plugin's native side is installed (PHP only, no bridge call) |
+| `Screen::canControlBrightness()` | `bool` | Whether brightness control is available (PHP only, no bridge call) |
 
 ### Events
 

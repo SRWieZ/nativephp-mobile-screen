@@ -179,3 +179,28 @@ describe('native errors', function () {
         expect(Screen::isAwake())->toBeFalse();
     });
 });
+
+describe('capability checks', function () {
+    it('reports what the bridge provides', function (Closure $check) {
+        expect($check())->toBeTrue();
+    })->with([
+        'isAvailable' => [fn () => Screen::isAvailable()],
+        'canControlBrightness' => [fn () => Screen::canControlBrightness()],
+    ]);
+
+    it('reports a missing capability', function (string $method, Closure $check) {
+        $this->bridge->withoutCapability($method);
+
+        expect($check())->toBeFalse();
+    })->with([
+        'isAvailable' => ['MobileScreen.IsAwake', fn () => Screen::isAvailable()],
+        'canControlBrightness' => ['MobileScreen.SetBrightness', fn () => Screen::canControlBrightness()],
+    ]);
+
+    it('never calls a bridge function to answer', function () {
+        Screen::isAvailable();
+        Screen::canControlBrightness();
+
+        $this->bridge->assertNothingCalled();
+    });
+});

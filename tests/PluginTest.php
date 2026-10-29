@@ -2,6 +2,7 @@
 
 use Native\Mobile\Events\Contracts\DispatchableFromNative;
 use SRWieZ\NativePHP\Mobile\Screen\Events as ScreenEvents;
+use SRWieZ\NativePHP\Mobile\Screen\Screen;
 
 beforeEach(function () {
     $this->pluginPath = dirname(__DIR__);
@@ -216,4 +217,13 @@ describe('Events', function () {
     })->with([
         'BrightnessChanged (Android and iOS)' => [ScreenEvents\BrightnessChanged::class, ['level' => 0.47, 'timestamp' => 1793283006]],
     ]);
+});
+
+describe('Capability checks without a bridge', function () {
+    it('reports nothing as available', function () {
+        $screen = new Screen;
+
+        expect($screen->isAvailable())->toBeFalse()
+            ->and($screen->canControlBrightness())->toBeFalse();
+    })->skip(fn () => function_exists('nativephp_can'), 'A nativephp_can() polyfill is loaded (NativePHP v4 test bridge).');
 });

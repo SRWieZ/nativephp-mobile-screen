@@ -106,6 +106,27 @@ class Screen
     }
 
     /**
+     * Whether this plugin's native side is installed in the running app
+     *
+     * Advisory and PHP-only: it reports what the native bridge registered,
+     * so it is false outside a NativePHP app (tests, web preview).
+     */
+    public function isAvailable(): bool
+    {
+        return $this->can('MobileScreen.IsAwake');
+    }
+
+    /**
+     * Whether the running app can control the screen brightness
+     *
+     * Advisory and PHP-only; see isAvailable().
+     */
+    public function canControlBrightness(): bool
+    {
+        return $this->can('MobileScreen.SetBrightness');
+    }
+
+    /**
      * Call a native bridge function and decode its response.
      *
      * Returns null when the bridge is unavailable, answers nothing or invalid
@@ -144,5 +165,14 @@ class Screen
         }
 
         return $decoded;
+    }
+
+    /**
+     * Whether the native bridge registered a function. False when there is
+     * no bridge at all.
+     */
+    protected function can(string $method): bool
+    {
+        return function_exists('nativephp_can') && nativephp_can($method);
     }
 }
