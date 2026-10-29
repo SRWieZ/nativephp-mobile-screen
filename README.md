@@ -226,7 +226,8 @@ $bridge->assertBrightnessSet(1.0);
 
 | Plugin | NativePHP Mobile | PHP | Notes |
 |--------|-----------------|-----|-------|
-| 2.x | 3.x and 4.x | 8.3+ | NativePHP v4 builds enforce Android API 29 / iOS 18 minimums |
+| 2.1.x | 3.3.11+ and 4.6.1+ | 8.3+ | NativePHP v4 apps require Android 8.0 (API 26) and target iOS 18.2 |
+| 2.0.x | 3.x and 4.x | 8.3+ | |
 | 1.x | 3.x | 8.2+ | Android 5.0 (API 21) / iOS 13 |
 
 The native code itself runs on Android 5.0 (API 21) and iOS 13 or newer — the
