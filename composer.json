@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": "^8.3",
-        "nativephp/mobile": "^3.0|^4.0",
+        "nativephp/mobile": "^3.3.11 || ^4.6.1",
         "illuminate/support": "^11.0|^12.0|^13.0"
     },
     "require-dev": {

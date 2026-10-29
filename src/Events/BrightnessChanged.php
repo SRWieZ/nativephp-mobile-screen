@@ -4,8 +4,9 @@ namespace SRWieZ\NativePHP\Mobile\Screen\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Native\Mobile\Events\Contracts\DispatchableFromNative;
 
-class BrightnessChanged
+class BrightnessChanged implements DispatchableFromNative
 {
     use Dispatchable, SerializesModels;
 

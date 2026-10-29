@@ -1,5 +1,8 @@
 <?php
 
+use Native\Mobile\Events\Contracts\DispatchableFromNative;
+use SRWieZ\NativePHP\Mobile\Screen\Events as ScreenEvents;
+
 beforeEach(function () {
     $this->pluginPath = dirname(__DIR__);
     $this->manifestPath = $this->pluginPath.'/nativephp.json';
@@ -164,4 +167,53 @@ describe('JavaScript Module', function () {
         expect($content)->toContain('export async function startBrightnessListener');
         expect($content)->toContain('export async function stopBrightnessListener');
     });
+});
+
+describe('Events', function () {
+    beforeEach(function () {
+        $this->events = json_decode(file_get_contents($this->manifestPath), true)['events'] ?? [];
+    });
+
+    it('lists only event classes that exist', function () {
+        expect($this->events)->not->toBeEmpty();
+
+        foreach ($this->events as $event) {
+            expect(class_exists($event))->toBeTrue("{$event} is listed in nativephp.json but does not exist");
+        }
+    });
+
+    it('marks every event as dispatchable from native code', function () {
+        foreach ($this->events as $event) {
+            expect(is_subclass_of($event, DispatchableFromNative::class))
+                ->toBeTrue("{$event} must implement DispatchableFromNative, or NativePHP 4.6.1+ and 3.3.11+ refuse to dispatch it");
+        }
+    });
+
+    it('lists every event class in the manifest', function () {
+        $classes = array_map(
+            fn (string $file): string => 'SRWieZ\\NativePHP\\Mobile\\Screen\\Events\\'.basename($file, '.php'),
+            glob($this->pluginPath.'/src/Events/*.php'),
+        );
+
+        expect($this->events)->toEqualCanonicalizing($classes);
+    });
+
+    it('can be built from a partial native payload', function () {
+        foreach ($this->events as $event) {
+            $parameters = (new ReflectionClass($event))->getConstructor()?->getParameters() ?? [];
+
+            foreach (array_slice($parameters, 1) as $parameter) {
+                expect($parameter->isOptional())
+                    ->toBeTrue("{$event}::\${$parameter->getName()} needs a default so `new \$event(...\$payload)` survives a missing key");
+            }
+        }
+    });
+
+    it('accepts every key the native side sends', function (string $event, array $payload) {
+        // NativePHP 3.x hydrates events with `new $event(...$payload)`, which
+        // throws on any payload key the constructor does not declare.
+        expect(new $event(...$payload))->toBeInstanceOf($event);
+    })->with([
+        'BrightnessChanged (Android and iOS)' => [ScreenEvents\BrightnessChanged::class, ['level' => 0.47, 'timestamp' => 1793283006]],
+    ]);
 });
